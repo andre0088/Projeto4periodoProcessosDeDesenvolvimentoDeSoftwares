@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8" />
+<title>RU Automatizado - Alunos</title>
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+<link href="/css/styleListagem.css" rel="stylesheet" type="text/css"
+	media="all" />
+<link rel="stylesheet" type="text/css" href="/css/fontello.css">
+</head>
+<body>
+	<nav class="navbar navbar-light" style="background-color: #C0C0C0;">
+		<span class="navbar-text" id="titulo">Restaurante Universitário
+			Automatizado </span>
+		<ul class="nav nav-pills nav-fill navbar-dark">
+			<li class="nav-item"><a class="nav-link" href="/gerenciar">Início</a></li>
+			<li class="nav-item"><a class="nav-link"
+				href="/funcionario">Funcionários</a></li>
+			<li class="nav-item"><a class="nav-link active" href="/aluno">Estudantes</a>
+			</li>
+			<li class="nav-item"><a class="nav-link" href="/logout">Sair</a>
+			</li>
+		</ul>
+	</nav>
+	<div class="card">
+		<div class="card-header">
+			<div class="clearfix">
+				<h5 id= "ListaAlunos" class="card-title card-funcionario-titulo">Lista de
+					Alunos</h5>
+				<a class="btn btn-link card-funcionario-novo" id="cadastroAluno"
+					href="/aluno/cadastro">Cadastrar aluno</a>
+			</div>
+		</div>
+
+		<div class="card-body">
+		
+		<form method="GET" class="form-horizontal" action="/aluno" th:object=${filtro}>
+				<div class="form-group row">
+					<div class ="col-sm-4">
+						<div class = "input-group">
+							<input class = "form-control" placeholder="Qual Aluno está procurando?"
+								autofocus="autofocus" th:field="*{matricula}"></input>
+							<span class="input-group-btn">
+								<button class="btn btn-outline-secondary" type="submit">
+									<i id="btnPesquisa" class="icon-search"></i>
+								</button>
+							</span>
+						</div>
+					</div>
+				</div>
+			
+			
+			</form>
+		
+			<table id ="tabela" class="table table-bordered table-striped">
+				<thead>
+					<tr>
+						<th scope="col">Matrícula</th>
+						<th scope="col">CPF</th>
+						<th scope="col">Nome</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="aluno: ${allAlunos}">
+						<td id="colMatricula" th:text="${aluno.matricula}">1</td>
+						<td id="colCPF" th:text="${aluno.cpf}"></td>
+						<td id="colNome" th:text="${aluno.nome}"></td>
+						<td class="text-center"><a class="btn btn-primary btn-xs"
+							th:href="@{/aluno/{matricula}(matricula=${aluno.matricula})}">
+								<i id ="btnPincel" class="icon-pencil"></i>
+						</a> <a class="btn btn-primary btn-xs" data-toggle="modal"
+							data-target="#meuModal"
+							th:attr="data-codigo=${aluno.matricula}"> <i
+								id="btnLixeira" class="icon-trash"></i>
+						</a></td>
+					</tr>
+					<tr>
+						<td colspan=3 th:if="${#lists.isEmpty(allAlunos)}" id="mensagemPesquisa">Nenhum aluno foi encontrado</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<!-- Modal -->
+	<div id="meuModal" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<form action="/aluno" method="POST">
+				<input type="hidden" name="_method" value="DELETE" />
+				<!-- Conteúdo do modal-->
+				<div class="modal-content">
+
+					<!-- Cabeçalho do modal -->
+					<div class="modal-header">
+						<h4 class="modal-title">Excluir aluno</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+
+					<!-- Corpo do modal -->
+					<div class="modal-body">
+						<p>Tem certeza que deseja excluir?</p>
+					</div>
+
+					<!-- Rodapé do modal-->
+					<div class="modal-footer">
+						<button type="button" id="btnCancelar" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+						<button type="submit" id="btnExcluir" class="btn btn-primary">Excluir</button>
+					</div>
+
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+
+
+	<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+	<!--<script src="/js/jquery-3.4.1.min.js"></script> -->
+	<script src="/js/modal.js"></script>
+</body>
+
+
+
+</html>
